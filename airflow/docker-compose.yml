@@ -23,13 +23,8 @@ services:
       - ../src:/opt/airflow/src
     entrypoint: >
       bash -c "airflow db init &&
-               airflow users create
-               --username admin
-               --password admin
-               --firstname Allan
-               --lastname Henrique
-               --role Admin
-               --email allan@example.com"
+      airflow users create --username admin --password admin --firstname Allan --lastname Henrique --role Admin --email allan@example.com"
+
 
   airflow-webserver:
     image: apache/airflow:2.9.3
@@ -40,11 +35,16 @@ services:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      PYTHONPATH: "/opt/airflow/project"
+      POSTGRES_URL: "postgresql://airflow:airflow@postgres:5432/airflow"
+
     ports:
       - "8080:8080"
     volumes:
       - ./dags:/opt/airflow/dags
       - ../src:/opt/airflow/src
+      - ../:/opt/airflow/project
+
     command: webserver
 
   airflow-scheduler:
@@ -56,10 +56,13 @@ services:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      PYTHONPATH: "/opt/airflow/project"
+      POSTGRES_URL: "postgresql://airflow:airflow@postgres:5432/airflow"
+
     volumes:
       - ./dags:/opt/airflow/dags
       - ../src:/opt/airflow/src
+      - ../:/opt/airflow/project
     command: scheduler
-
 volumes:
   pgdata:

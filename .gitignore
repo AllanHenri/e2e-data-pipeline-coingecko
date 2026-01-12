@@ -208,3 +208,5 @@ __marimo__/
 
 # local config (secrets)
 src/utils/config.py
+
+.env
