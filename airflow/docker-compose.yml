@@ -22,8 +22,18 @@ services:
       - ./dags:/opt/airflow/dags
       - ../src:/opt/airflow/src
     entrypoint: >
-      bash -c "airflow db init &&
-      airflow users create --username admin --password admin --firstname Allan --lastname Henrique --role Admin --email allan@example.com"
+      bash -c "
+        airflow db migrate &&
+        airflow users create
+          --username admin
+          --password admin
+          --firstname Allan
+          --lastname Henrique
+          --role Admin
+          --email allan@example.com
+        || true
+      "
+
 
 
   airflow-webserver:
