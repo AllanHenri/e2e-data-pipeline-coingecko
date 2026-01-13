@@ -210,3 +210,5 @@ __marimo__/
 src/utils/config.py
 
 .env
+src/utils/config.py
+.env
